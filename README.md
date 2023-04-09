@@ -6,8 +6,8 @@ This is a simple typing game made with JavaScript that allows users to test thei
 To get started, simply clone the repository and open the index.html file in your browser.
 
 ```bash
-git clone https://github.com/username/typing-game.git
-cd typing-game
+git clone [https://github.com/Worvios/Typing-game-]
+cd Typing-game-
 open index.html
 ```
 
