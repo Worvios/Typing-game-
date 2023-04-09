@@ -6,7 +6,6 @@ This is a simple typing game made with JavaScript that allows users to test thei
 To get started, simply clone the repository and open the index.html file in your browser.
 
 ```bash
-Copy code
 git clone https://github.com/username/typing-game.git
 cd typing-game
 open index.html
