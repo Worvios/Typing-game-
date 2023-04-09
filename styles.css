@@ -10,16 +10,7 @@ body {
     margin: 0;
     background-color: #6441a5 ;
 }
-footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 50px;
-    background-color: blueviolet;
-    padding: 10px;
-    text-align: center;
-  }
+
   
 
 body, .quote-input {
@@ -73,3 +64,13 @@ body, .quote-input {
     color: red;
     text-decoration: underline;
 }
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    background-color: blueviolet;
+    padding: 10px;
+    text-align: center;
+  }
