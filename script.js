@@ -1,11 +1,8 @@
-//const RANDOM_QUOTE_API_URL = 'https://zenquotes.io/api/random';
+// --- Use the Quotable API ---
+const RANDOM_QUOTE_API_URL = 'https://api.quotable.io/random';
 const quoteDisplayElement = document.getElementById('quoteDisplay');
 const quoteInputElement = document.getElementById('quoteInput');
 const timerElement = document.getElementById('timer');
-// const RANDOM_QUOTE_API_URL = 'https://zenquotes.io/api/random'; // Original
-const PROXY_URL = 'https://cors-anywhere.herokuapp.com/'; // Example proxy
-const RANDOM_QUOTE_API_URL = PROXY_URL + 'https://zenquotes.io/api/random'; // Proxied URL
-
 
 // Variable to hold the timer interval ID
 let timerInterval = null;
@@ -42,33 +39,35 @@ quoteInputElement.addEventListener('input', () => {
 });
 
 function getRandomQuote() {
+    // Fetch from the Quotable API
     return fetch(RANDOM_QUOTE_API_URL)
         .then(response => {
             if (!response.ok) {
+                // Throw an error with the status code if response is not OK
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             return response.json();
         })
         .then(data => {
-            // --- FIX 1: Access the quote text correctly ---
-            if (data && data.length > 0 && data[0].q) {
-                return data[0].q; // Get the quote text from the 'q' property of the first object
+            // --- FIX: Access the quote text correctly from Quotable's response ---
+            if (data && data.content) {
+                return data.content; // Get the quote text from the 'content' property
             } else {
-                // Provide a fallback quote if API fails or returns unexpected data
-                console.error("Failed to fetch a proper quote, using fallback.");
-                return "Could not fetch quote. Please try again.";
+                // Provide a fallback quote if API returns unexpected data
+                console.error("API did not return expected data format.");
+                return "Could not fetch a valid quote. Please try again.";
             }
         })
         .catch(error => {
             console.error("Error fetching random quote:", error);
-            // Provide a fallback quote on fetch error
-             quoteDisplayElement.innerText = "Error loading quote. Check console."; // Display error to user
-            return null; // Return null to indicate failure
+            // Display error to user and return null to indicate failure
+            quoteDisplayElement.innerText = `Error: ${error.message}. Check console.`;
+            return null;
         });
 }
 
 async function renderNewQuote() {
-    // Optional: Disable input while loading
+    // Optional: Disable input while loading and provide feedback
     quoteInputElement.disabled = true;
     quoteDisplayElement.innerText = "Loading..."; // Indicate loading
 
@@ -76,7 +75,7 @@ async function renderNewQuote() {
 
     // Only proceed if a quote was successfully fetched
     if (quote) {
-        quoteDisplayElement.innerHTML = ''; // Clear previous quote or loading message
+        quoteDisplayElement.innerHTML = ''; // Clear previous quote or loading/error message
         quote.split('').forEach(character => {
             const characterSpan = document.createElement('span');
             characterSpan.innerText = character;
@@ -85,9 +84,8 @@ async function renderNewQuote() {
         quoteInputElement.value = null; // Clear the input field
         startTimer(); // Start the timer for the new quote
     } else {
-        // Handle the case where quote fetching failed (error already logged)
-        // Keep input disabled or provide further instructions
-        // For simplicity, we'll just leave the error message in quoteDisplayElement
+        // Handle the case where quote fetching failed (error already logged and message shown)
+        // Keep input disabled or provide further instructions if desired
     }
      // Re-enable input after loading is complete (or failed)
     quoteInputElement.disabled = false;
@@ -98,7 +96,7 @@ async function renderNewQuote() {
 
 
 function startTimer() {
-    // --- FIX 2: Clear any existing timer interval ---
+    // Clear any existing timer interval
     if (timerInterval) {
         clearInterval(timerInterval);
     }
@@ -107,7 +105,6 @@ function startTimer() {
     startTime = new Date();
     // Store the new interval ID
     timerInterval = setInterval(() => {
-        // Ensure timerElement is used, not the global 'timer' which might be undefined
         timerElement.innerText = getTimerTime();
     }, 1000);
 }
@@ -118,3 +115,4 @@ function getTimerTime() {
 
 // Initial call to load the first quote when the page loads
 renderNewQuote();
+
