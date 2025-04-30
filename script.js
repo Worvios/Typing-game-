@@ -39,12 +39,13 @@ quoteInputElement.addEventListener('input', () => {
 
 async function getRandomQuote() {
     try {
-        const response = await fetch(RANDOM_QUOTE_API_URL);
+        const response = await fetch('https://type.fit/api/quotes');
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        return data.content || "The only way to do great work is to love what you do."; // Fallback quote
+        const randomQuote = data[Math.floor(Math.random() * data.length)];
+        return randomQuote.text || "The only way to do great work is to love what you do.";
     } catch (error) {
         console.error("Error fetching quote:", error);
         quoteDisplayElement.innerText = "Failed to load quote. Please try again.";
