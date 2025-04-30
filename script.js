@@ -39,17 +39,16 @@ quoteInputElement.addEventListener('input', () => {
 
 async function getRandomQuote() {
     try {
-        const response = await fetch('https://type.fit/api/quotes');
+        const response = await fetch(RANDOM_QUOTE_API_URL);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        const randomQuote = data[Math.floor(Math.random() * data.length)];
-        return randomQuote.text || "The only way to do great work is to love what you do.";
+        return data.content || "The only way to do great work is to love what you do."; // Fallback quote
     } catch (error) {
         console.error("Error fetching quote:", error);
-        quoteDisplayElement.innerText = "Failed to load quote. Please try again.";
-        return null;
+        quoteDisplayElement.innerText = "Failed to load quote. Using fallback.";
+        return "The only way to do great work is to love what you do."; // Fallback quote
     }
 }
 
@@ -58,20 +57,16 @@ async function renderNewQuote() {
     quoteDisplayElement.innerText = "Loading...";
 
     const quote = await getRandomQuote();
-    if (quote) {
-        quoteDisplayElement.innerHTML = '';
-        quote.split('').forEach(character => {
-            const characterSpan = document.createElement('span');
-            characterSpan.innerText = character;
-            quoteDisplayElement.appendChild(characterSpan);
-        });
-        quoteInputElement.value = '';
-        startTimer();
-        quoteInputElement.disabled = false;
-        quoteInputElement.focus();
-    } else {
-        quoteInputElement.disabled = false;
-    }
+    quoteDisplayElement.innerHTML = '';
+    quote.split('').forEach(character => {
+        const characterSpan = document.createElement('span');
+        characterSpan.innerText = character;
+        quoteDisplayElement.appendChild(characterSpan);
+    });
+    quoteInputElement.value = '';
+    startTimer();
+    quoteInputElement.disabled = false;
+    quoteInputElement.focus();
 }
 
 function startTimer() {
