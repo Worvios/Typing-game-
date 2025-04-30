@@ -34,8 +34,9 @@ quoteInputElement.addEventListener('input', () => {
 function getRandomQuote() {
   return fetch(RANDOM_QUOTE_API_URL)
     .then(response => response.json())
-    .then(data => data.content)
+    .then(data => data[0].q)  // 'q' is the quote, 'a' is the author
 }
+
 
 async function renderNewQuote() {
   const quote = await getRandomQuote()
@@ -49,14 +50,20 @@ async function renderNewQuote() {
   startTimer()
 }
 
-let startTime
+let timerInterval;
+
 function startTimer() {
   timerElement.innerText = 0
   startTime = new Date()
-  setInterval(() => {
-    timer.innerText = getTimerTime()
+
+  // Clear previous interval if it exists
+  if (timerInterval) clearInterval(timerInterval)
+
+  timerInterval = setInterval(() => {
+    timerElement.innerText = getTimerTime()
   }, 1000)
 }
+
 
 function getTimerTime() {
   return Math.floor((new Date() - startTime) / 1000)
