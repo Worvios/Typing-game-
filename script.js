@@ -1,7 +1,11 @@
-const RANDOM_QUOTE_API_URL = 'https://zenquotes.io/api/random';
+//const RANDOM_QUOTE_API_URL = 'https://zenquotes.io/api/random';
 const quoteDisplayElement = document.getElementById('quoteDisplay');
 const quoteInputElement = document.getElementById('quoteInput');
 const timerElement = document.getElementById('timer');
+// const RANDOM_QUOTE_API_URL = 'https://zenquotes.io/api/random'; // Original
+const PROXY_URL = 'https://cors-anywhere.herokuapp.com/'; // Example proxy
+const RANDOM_QUOTE_API_URL = PROXY_URL + 'https://zenquotes.io/api/random'; // Proxied URL
+
 
 // Variable to hold the timer interval ID
 let timerInterval = null;
